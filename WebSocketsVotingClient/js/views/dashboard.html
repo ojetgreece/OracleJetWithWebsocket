@@ -1,0 +1,115 @@
+    <h1>Spass mit Oracle Jet Voting app</h1>
+    <div id="top">
+    <h3>List of Voting Rooms</h3>
+    <div id="listViewContainer">
+        <ul id="listview" aria-label="list using observable array" 
+            data-bind="ojComponent: {
+                component: 'ojListView', 
+                data: dataSource, 
+                selectionMode: 'single',
+                selection: selectedItems,
+                item: 
+                {
+                    renderer: function(context)
+                    {
+                        return context['data']['name'];
+                    }             
+                }
+            }">
+        </ul>
+    </div>
+    <button id="enter" 
+               data-bind="click: enter, 
+                          ojComponent: {component: 'ojButton', label: 'Enter Rooom'}"></button>
+
+
+
+   
+    <h3>create new Voting Room</h3>
+    <label for="newRoomName">Name the room</label>
+    <input id="newRoomName" 
+           type="text"
+           data-bind="ojComponent: {component: 'ojInputText', 
+                                    value: newRoomName}"/>
+    <button id="createRoom" 
+               data-bind="click: createRoom, 
+                          ojComponent: {component: 'ojButton', label: 'Create Rooom'}"/>
+
+    </div>
+    <div id="bottom" style="padding-top: 5%" hidden="true">
+        <button id="createQuestion" 
+               data-bind="click: createQuestion, 
+                          ojComponent: {component: 'ojButton', label: 'create Question'}"></button>
+        
+        <h3>
+            New Question
+        </h3>
+        <label for="newQuestion">New Question</label>
+        <input id="newQuestion" 
+               type="text"
+               data-bind="ojComponent: {component: 'ojInputText', 
+                                    value: newQuestion}"/>
+        
+        <label for="Answers">New Answers seperated by ;</label>
+        <input id="Answers" type="text"
+               data-bind="ojComponent: {component: 'ojInputText', 
+                                    value: answers}"/>
+    
+    <h4>Question</h4>
+    <span data-bind="text: newQuestion"></span>
+
+    <div id='chart-container'>
+    <div id="pieChart" data-bind="ojComponent: {
+            component: 'ojChart', 
+            type: 'pie', 
+            series: pieSeriesValue,
+            animationOnDisplay: 'auto',
+            animationOnDataChange: 'auto',
+            styleDefaults: {threeDEffect: ko.toJS(threeDValue)},
+            hoverBehavior: 'dim'
+        }"
+        style="max-width:500px;width:100%;height:350px;">
+    </div>
+    <!-- 2d/3d toggle button -->
+    <div id="radioButtonset2" class="oj-buttonset-width-auto" aria-label="Choose only one setting." aria-controls="pieChart"
+        data-bind="ojComponent: {component: 'ojButtonset', checked: threeDValue, optionChange: threeDValueChange}">
+        <!-- ko foreach: threeDOptions -->
+            <label data-bind="attr: {for: id}"></label>                               
+            <input type="radio" name="threeD"
+                   data-bind="value: value, attr: {id: id},
+                   ojComponent: {component: 'ojButton', label: label}"/>
+        <!-- /ko -->
+    </div>
+    </div>
+    <div id="bottomstest" style="padding-top: 5%">
+    <form id="formId" class="oj-form">
+    <label id="mainlabelid">Voting-thing</label>
+    <!-- You need to set the aria-labelledby attribute
+         to make this accessible.
+       role="radiogroup" is set for you by ojRadioset. -->  
+   <ul id="votingListView" aria-label="list using observable array" 
+            data-bind="ojComponent: {
+                component: 'ojListView', 
+                data: votingDataSource, 
+                selectionMode: 'single',
+                selection: selectedOption,
+                item: 
+                {
+                    renderer: function(context)
+                    {
+                        return context['data']['answer'];
+                    }             
+                }
+            }">
+        </ul>
+
+    </div>
+    <br/>
+    <button id="vote" 
+               data-bind="click: sendVote, 
+                          ojComponent: {component: 'ojButton', label: 'Vote!'}"></button>
+    <br/>
+    <br/>
+
+
+    </div>
