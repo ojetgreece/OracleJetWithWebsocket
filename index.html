@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Oraclejet with WebSockets by sebivenlo</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Oraclejet with WebSockets</h1>
+        <h2></h2>
+        <a href="https://github.com/sebivenlo/OracleJetWithWebsocket" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <p>In this workshop we are going to develop a voting app. This voting app should serve as a tool, for example in the Theory classes of MOD2, where Mr van den Hombergh is able to test the knowledge of the students in form of this app, instead of wasting papers by distributing paper-based quizzes.</p>
+
+<p>The teacher creates a question, and a set of answers as options. Each student is able to vote for the answer-option, which is correct according to him/her. The submitted answers are displayed in real time, on a pie-chart.</p>
+
+<h3>
+<a id="starting-point" class="anchor" href="#starting-point" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Starting point</h3>
+
+<p>In order to start with this workshop, please checkout the projects <strong>WebsocketVotingServerWorkshop</strong> and <strong>WebsocketVotingClient</strong> from the GIT repository.</p>
+
+<h3>
+<a id="task-1" class="anchor" href="#task-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Task 1</h3>
+
+<p>Open <strong>votingEndpoint.java</strong> from <strong>WebsocketVotingServerWorkshop</strong>.
+Insert the annotations:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">@ApplicationScoped</span> </pre></div>
+
+<p>and</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">@ServiceEndpoint</span></pre></div>
+
+<p>with the parameter "/voting"
+and make sure, that you add the relevant imports.</p>
+
+<p>So... lets think... 
+Why do we need these <em>annotations</em>?</p>
+
+<h3>
+<a id="task-2" class="anchor" href="#task-2" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Task 2</h3>
+
+<p>Next, you have to define a </p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">VotingHandler</span> </pre></div>
+
+<p>and annotate it with </p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">@Inject</span></pre></div>
+
+<p>You can name it for example <strong>sessionHandler.</strong></p>
+
+<h3>
+<a id="task-3" class="anchor" href="#task-3" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Task 3</h3>
+
+<p>Create the methods and the relevant annotations </p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">void</span> onOpen()</pre></div>
+
+<p>with the Session as the parameter
+and </p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">void</span> onClose()</pre></div>
+
+<p>with the same parameter.</p>
+
+<p><strong>Tricky part</strong>: Try to find out, what you need to do with the Session parameter. <em>A small clue, it has to do with the *</em>sessionHandler*<em>.</em></p>
+
+<h3>
+<a id="task-4" class="anchor" href="#task-4" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Task 4</h3>
+
+<p>Now you have to implement the method </p>
+
+<div class="highlight highlight-source-java"><pre>onMessage()</pre></div>
+
+<p>with the parameters <strong>message</strong> of the type <em>String</em> and a <strong>Session</strong>.
+This method also needs the annotation </p>
+
+<div class="highlight highlight-source-java"><pre>onMessage</pre></div>
+
+<p>The method was named <strong>onMessage</strong> for convenience, because of the annotation.</p>
+
+<h3>
+<a id="task-5" class="anchor" href="#task-5" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Task 5</h3>
+
+<p>Try to get the <strong>Json</strong> from the message.
+For this, the </p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">JsonReader</span> </pre></div>
+
+<p>will be used.
+You can use the code below:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">JsonReader</span> reader <span class="pl-k">=</span> <span class="pl-smi">Json</span><span class="pl-k">.</span>createReader(<span class="pl-k">new</span> <span class="pl-smi">StringReader</span>(message)) </pre></div>
+
+<h3>
+<a id="task-6" class="anchor" href="#task-6" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Task 6</h3>
+
+<p>With the created reader, you can read the Objects and save them into a </p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">JsonObject</span></pre></div>
+
+<p>which may be called </p>
+
+<div class="highlight highlight-source-java"><pre>jsonMessage</pre></div>
+
+<h3>
+<a id="task-7" class="anchor" href="#task-7" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Task 7</h3>
+
+<p>Insert the following line:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">ActionEnum</span> action <span class="pl-k">=</span> <span class="pl-smi">ActionEnum</span><span class="pl-k">.</span>valueOf(jsonMessage<span class="pl-k">.</span>getString(<span class="pl-s"><span class="pl-pds">"</span>action<span class="pl-pds">"</span></span>)); </pre></div>
+
+<p>This line of code extracts the action to be carried out in this app.</p>
+
+<h3>
+<a id="task-8" class="anchor" href="#task-8" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Task 8</h3>
+
+<p>You may take a look at the <strong>ActionEnum.java</strong> file in the <strong>endpoints</strong> package.</p>
+
+<p>Implement the following actions regarding the <strong>ACTION ENUM</strong>:
+(You may use the cheat-sheet for the JSON format)</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-c1">SETNAME</span>, 
+<span class="pl-c1">GETROOMLIST</span>,
+<span class="pl-c1">CREATEROOM</span>, 
+<span class="pl-c1">JOINROOM</span>,  
+<span class="pl-c1">NEWQUESTION</span>,  
+<span class="pl-c1">ANSWERQUESTION</span>  </pre></div>
+
+<h3>
+<a id="task-9" class="anchor" href="#task-9" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Task 9</h3>
+
+<p><strong>FOR THE EAGER STUDENTS</strong></p>
+
+<p>Now you can have a look at the client-side Websocket connections in
+<em>WebSocketsVotingClient/Siteroot/js/viewModels/dashboard.js</em></p>
+
+<p>You may notice similarities with the server-side web socket implementations.</p>
+
+<h2>
+<a id="task-91" class="anchor" href="#task-91" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Task 9.1</h2>
+
+<p>Now, you can try to implement the new functionality to be able to display the name of the room's creator. </p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/sebivenlo/OracleJetWithWebsocket/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/sebivenlo/OracleJetWithWebsocket/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/sebivenlo/OracleJetWithWebsocket"></a> is maintained by <a href="https://github.com/sebivenlo">sebivenlo</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
